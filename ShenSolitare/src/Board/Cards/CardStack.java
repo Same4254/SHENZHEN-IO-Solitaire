@@ -19,13 +19,16 @@ public abstract class CardStack {
 	public void setPosition(int x, int y) { hitBox.setRect(x, y, hitBox.width, hitBox.height); }
 	
 	public abstract boolean canAddCardStack(CardStack stack);
+	public void addCardStack(CardStack stack) {
+		addCards(stack.cards);
+		stack.removeFromIndex(0);
+	}
+	
 	public void addCards(ArrayList<Card> otherCards) {
 		for(Card c : otherCards) {
 			c.setCardStack(this);
 			cards.add(c);
 		}
-		
-		otherCards.clear();
 	}
 	
 	public abstract boolean canRemoveFromIndex(int index);

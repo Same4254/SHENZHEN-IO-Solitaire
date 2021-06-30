@@ -60,7 +60,8 @@ public class BoardPanel extends JPanel {
 				ArrayList<Card> temp = new ArrayList<>();
 				for(int i = startIndex; i < s.getCards().size(); i++)
 					temp.add(s.getCards().get(i));
-					
+
+				heldCards.setPosition((int) s.getCards().get(startIndex).getHitBox().x, (int) s.getCards().get(startIndex).getHitBox().y);
 				heldCards.addCards(temp);
 				
 				offsetX = (int) (e.getX() - heldCards.getCards().get(0).getHitBox().x);
@@ -81,7 +82,19 @@ public class BoardPanel extends JPanel {
 		
 		@Override
 		public void mouseReleased(MouseEvent e) {
+			for(CardStack stack : board.getCardStacks()) {
+				if(!stack.getHitBox().intersects(heldCards.getHitBox()))
+					continue;
+				
+				if(stack.canAddCardStack(heldCards)) {
+					stack.addCardStack(heldCards);
+					repaint();
+					return;
+				}
+			}
 			
+			originalStack.addCardStack(heldCards);
+			repaint();
 		}
 	}
 }
