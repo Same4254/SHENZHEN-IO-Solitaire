@@ -4,10 +4,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
 import Board.Board;
+import Board.Cards.Card;
 import Board.Cards.CardStack;
 import Board.Cards.DescendingCardStack;
 
@@ -43,6 +45,7 @@ public class BoardPanel extends JPanel {
 	}
 	
 	private class MouseAdpt extends MouseAdapter {
+		private CardStack originalStack;
 		private int offsetX, offsetY;
 		
 		@Override
@@ -52,8 +55,13 @@ public class BoardPanel extends JPanel {
 				if(startIndex == -1)
 					continue;
 				
+				originalStack = s;
+				
+				ArrayList<Card> temp = new ArrayList<>();
 				for(int i = startIndex; i < s.getCards().size(); i++)
-					heldCards.addCard(s.getCards().get(i));
+					temp.add(s.getCards().get(i));
+					
+				heldCards.addCards(temp);
 				
 				offsetX = (int) (e.getX() - heldCards.getCards().get(0).getHitBox().x);
 				offsetY = (int) (e.getY() - heldCards.getCards().get(0).getHitBox().y);
@@ -67,6 +75,8 @@ public class BoardPanel extends JPanel {
 		@Override
 		public void mouseDragged(MouseEvent e) {
 			heldCards.setPosition(e.getX() - offsetX, e.getY() - offsetY);
+			
+			repaint();
 		}
 		
 		@Override

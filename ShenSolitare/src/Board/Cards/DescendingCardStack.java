@@ -2,6 +2,7 @@ package Board.Cards;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 public class DescendingCardStack extends CardStack {
 	public static final int CARD_GAP = 20;
@@ -39,18 +40,24 @@ public class DescendingCardStack extends CardStack {
 	}
 	
 	@Override
-	public boolean canAddCard(Card c) {
+	public boolean canAddCardStack(CardStack stack) {
 		return true;
 	}
 
 	@Override
-	public void addCard(Card c) {
-		super.addCard(c);
+	public void addCards(ArrayList<Card> otherCards) {
+		for(int i = 0; i < otherCards.size(); i++) {
+			Card c = otherCards.get(i);
+			cards.add(c);
+			c.setCardStack(this);
+			
+			c.setPosition((int) hitBox.x, (int)(hitBox.y + (CARD_GAP * (cards.size() - 1))));
+			
+			if(cards.size() > 1)
+				hitBox.height += CARD_GAP;
+		}
 		
-		c.setPosition((int) hitBox.x, (int)(hitBox.y + (CARD_GAP * (cards.size() - 1))));
-		
-		if(cards.size() > 1)
-			hitBox.height += CARD_GAP;
+		otherCards.clear();
 	}
 
 	@Override

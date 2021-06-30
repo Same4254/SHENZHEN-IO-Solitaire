@@ -18,12 +18,19 @@ public abstract class CardStack {
 	public abstract int getIndexFromMousePosition(int mouseX, int mouseY);
 	public void setPosition(int x, int y) { hitBox.setRect(x, y, hitBox.width, hitBox.height); }
 	
-	public abstract boolean canAddCards(CardStack stack);
-	public abstract void addCardStack(CardStack stack);
+	public abstract boolean canAddCardStack(CardStack stack);
+	public void addCards(ArrayList<Card> otherCards) {
+		for(Card c : otherCards) {
+			c.setCardStack(this);
+			cards.add(c);
+		}
+		
+		otherCards.clear();
+	}
 	
 	public abstract boolean canRemoveFromIndex(int index);
 	public void removeFromIndex(int index) {
-		for(int i = cards.size(); i >= index; i--)
+		for(int i = cards.size() - 1; i >= index; i--)
 			cards.remove(i);
 	}
 	

@@ -17,8 +17,11 @@ public class Board {
 		cardStacks.add(new DescendingCardStack());
 		cardStacks.add(new DescendingCardStack());
 		
-		cardStacks.get(0).addCard(new Card(Color.red));
-		cardStacks.get(0).addCard(new Card(Color.blue));
+		ArrayList<Card> temp = new ArrayList<Card>();
+		temp.add(new Card(Color.red));
+		temp.add(new Card(Color.blue));
+		
+		cardStacks.get(0).addCards(temp);
 	}
 	
 	public void render(Graphics2D g2d) {
