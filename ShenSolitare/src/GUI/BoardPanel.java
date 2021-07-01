@@ -24,7 +24,8 @@ public class BoardPanel extends JPanel {
 		this.board = new Board();
 		this.heldCards = new DescendingCardStack();
 		
-		board.getCardStacks().get(1).setPosition(100, 0);
+		for(int i = 0; i <= 7; i++)
+			board.getCardStacks().get(i).setPosition(Card.CARD_WDITH * i, 0);
 		
 		MouseAdpt adpt = new MouseAdpt();
 		
@@ -52,7 +53,7 @@ public class BoardPanel extends JPanel {
 		public void mousePressed(MouseEvent e) {
 			for(CardStack s : board.getCardStacks()) {
 				int startIndex = s.getIndexFromMousePosition(e.getX(), e.getY());
-				if(startIndex == -1)
+				if(startIndex == -1 || !s.canRemoveFromIndex(startIndex))
 					continue;
 				
 				originalStack = s;
@@ -92,9 +93,11 @@ public class BoardPanel extends JPanel {
 					return;
 				}
 			}
-			
-			originalStack.addCardStack(heldCards);
-			repaint();
+
+			if(heldCards.getCards().size() > 0) {
+				originalStack.addCardStack(heldCards);
+				repaint();
+			}
 		}
 	}
 }

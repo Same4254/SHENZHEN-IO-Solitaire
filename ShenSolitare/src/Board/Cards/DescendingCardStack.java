@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 public class DescendingCardStack extends CardStack {
-	public static final int CARD_GAP = 20;
+	public static final int CARD_GAP = 40;
 	
 	public DescendingCardStack() {
 		super();
@@ -41,7 +41,14 @@ public class DescendingCardStack extends CardStack {
 	
 	@Override
 	public boolean canAddCardStack(CardStack stack) {
-		return true;
+		if(!(stack instanceof DescendingCardStack) || stack.getCards().size() == 0)
+			return false;
+		
+		if(cards.size() == 0)
+			return true;
+		
+		DescendingCardStack dStack = (DescendingCardStack) stack;
+		return cards.get(cards.size() - 1).isNextCard(dStack.cards.get(0));
 	}
 
 	@Override
@@ -62,7 +69,7 @@ public class DescendingCardStack extends CardStack {
 
 	@Override
 	public boolean canRemoveFromIndex(int index) {
-		return true;
+		return isDescendingAndAlternating(index);
 	}
 	
 	@Override
@@ -70,5 +77,26 @@ public class DescendingCardStack extends CardStack {
 		super.removeFromIndex(index);
 		
 		hitBox.height = Card.CARD_HEIGHT + Math.max(0, (CARD_GAP * (cards.size() - 1)));
+	}
+	
+	private boolean isDescendingAndAlternating(int fromIndex) {
+		if(fromIndex == cards.size() - 1)
+			return true;
+		
+		Card lastCard = cards.get(fromIndex);
+		
+		if(lastCard.getNumber() == -1)
+			return false;
+		
+		for(int i = fromIndex + 1; i < cards.size(); i++) {
+			Card currentCard = cards.get(i);
+			
+			if(!lastCard.isNextCard(currentCard))
+				return false;
+			
+			lastCard = currentCard;
+		}
+		
+		return true;
 	}
 }
